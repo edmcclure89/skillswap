@@ -71,9 +71,9 @@ function App() {
                   <div className="absolute top-full left-0 mt-2 bg-white text-slate-900 rounded-lg shadow-lg p-3 w-48 z-10">
                     <p className="text-sm text-slate-600 mb-2">Explore {cat}:</p>
                     <ul className="space-y-2 text-sm">
-                      <li><a href="#" className="hover:text-teal-500 font-medium">Trending in {cat}</a></li>
-                      <li><a href="#" className="hover:text-teal-500 font-medium">Top Experts</a></li>
-                      <li><a href="#" className="hover:text-teal-500 font-medium">New Offers</a></li>
+                      <li><button className="hover:text-teal-500 font-medium text-left w-full">Trending in {cat}</button></li>
+                      <li><button className="hover:text-teal-500 font-medium text-left w-full">Top Experts</button></li>
+                      <li><button className="hover:text-teal-500 font-medium text-left w-full">New Offers</button></li>
                     </ul>
                   </div>
                 )}
