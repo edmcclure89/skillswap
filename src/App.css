@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add this below just in case the engine is being stubborn */
+img {
+  max-width: 100px;
+}
