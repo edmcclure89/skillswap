@@ -41,7 +41,7 @@ function App() {
 
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white py-24 px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-black leading-tight mb-4">Your skills are currency.</h2>
+          <h2 className="text-5xl font-black leading-tight mb-4">🚀 Your skills are currency. [LIVE v2]</h2>
           <p className="text-2xl text-slate-300 mb-8">Match with people who have what you need and need what you have. Zero dollars exchanged.</p>
 
           <div className="bg-white text-slate-900 rounded-xl p-1 flex items-center gap-2 mb-8 shadow-2xl">
