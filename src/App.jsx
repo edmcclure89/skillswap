@@ -77,7 +77,7 @@ function App() {
         textAlign: 'center'
       }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '48px', fontWeight: '900', marginBottom: '16px' }}>🚀 Your skills are currency. [LIVE v2]</h2>
+          <h2 style={{ fontSize: '48px', fontWeight: '900', marginBottom: '16px' }}>🚀 Your skills are currency</h2>
           <p style={{ fontSize: '20px', color: appleColors.silver, marginBottom: '32px' }}>Match with people who have what you need and need what you have. Zero dollars exchanged.</p>
 
           {/* Search Bar */}
