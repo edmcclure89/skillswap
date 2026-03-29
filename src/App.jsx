@@ -38,6 +38,14 @@ function App() {
     fetchProfiles();
   }, []);
 
+  const handleJoin = () => {
+    window.location.href = '/auth';
+  };
+
+  const handleSwap = (profileId) => {
+    console.log('Swap initiated with:', profileId);
+  };
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: appleColors.white, fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
       {/* Navigation */}
@@ -45,7 +53,7 @@ function App() {
         <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h1 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.silver, margin: 0 }}>SkillSwap</h1>
           <button
-            onClick={() => window.location.href = '/auth'}
+            onClick={handleJoin}
             style={{
               backgroundColor: appleColors.blue,
               color: 'white',
@@ -196,14 +204,17 @@ function App() {
                   alignItems: 'center'
                 }}>
                   <span style={{ fontSize: '12px', color: '#999', fontWeight: '600' }}>Seeking: {profile.seeking_skill}</span>
-                  <button style={{
-                    color: appleColors.blue,
-                    fontWeight: '700',
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    cursor: 'pointer',
-                    fontSize: '14px'
-                  }}>
+                  <button 
+                    onClick={() => handleSwap(profile.id)}
+                    style={{
+                      color: appleColors.blue,
+                      fontWeight: '700',
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer',
+                      fontSize: '14px'
+                    }}
+                  >
                     Swap
                   </button>
                 </div>
