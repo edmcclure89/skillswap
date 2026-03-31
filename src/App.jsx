@@ -420,59 +420,168 @@ function App() {
           <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '32px' }}>Trending in Your Network</h3>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: '24px'
           }}>
             {profiles.map((profile, idx) => (
               <div
                 key={profile.id}
                 style={{
-                  backgroundColor: appleColors.white,
+                  backgroundColor: 'white',
                   borderRadius: '12px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
                   border: `1px solid ${appleColors.silver}`,
-                  padding: '24px',
-                  transition: 'box-shadow 0.3s ease'
+                  padding: '20px',
+                  transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                <div style={{ display: 'flex', gap: '16px', marginBottom: '16px', alignItems: 'flex-start' }}>
+                {/* Online Status Indicator */}
+                <div style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: '16px',
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#34C759',
+                  border: '2px solid white',
+                  boxShadow: '0 0 0 1px #34C759'
+                }} />
+
+                {/* Header with Icon and Name */}
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', alignItems: 'flex-start' }}>
                   <SkillIcon skill={profile.primary_skill} />
-                  <div style={{ flex: 1 }}>
-                    <h2 style={{ fontSize: '18px', fontWeight: '700', color: appleColors.gray, margin: '0 0 8px 0' }}>{profile.full_name}</h2>
-                    <span style={{
-                      backgroundColor: idx % 2 === 0 ? appleColors.blue : appleColors.orange,
-                      color: 'white',
-                      fontSize: '12px',
-                      fontWeight: '600',
-                      padding: '4px 12px',
-                      borderRadius: '20px',
-                      display: 'inline-block'
-                    }}>
-                      {profile.primary_skill}
-                    </span>
+                  <div style={{ flex: 1, marginTop: '2px' }}>
+                    <h2 style={{ fontSize: '16px', fontWeight: '700', color: appleColors.gray, margin: '0 0 6px 0' }}>{profile.full_name}</h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                      <span style={{
+                        backgroundColor: idx % 2 === 0 ? appleColors.blue : appleColors.orange,
+                        color: 'white',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        padding: '3px 10px',
+                        borderRadius: '12px',
+                        display: 'inline-block'
+                      }}>
+                        {profile.primary_skill}
+                      </span>
+                      <span style={{
+                        backgroundColor: '#f0f0f0',
+                        color: '#666',
+                        fontSize: '10px',
+                        fontWeight: '600',
+                        padding: '3px 8px',
+                        borderRadius: '12px',
+                        display: 'inline-block'
+                      }}>
+                        {idx % 3 === 0 ? 'Pro' : idx % 3 === 1 ? 'Rising' : 'New'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <p style={{ color: '#666', fontSize: '14px', marginBottom: '16px' }}>{profile.bio}</p>
+
+                {/* Rating Section */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', fontSize: '13px' }}>
+                  <span style={{ color: '#f59e0b' }}>
+                    {'★'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
+                  </span>
+                  <span style={{ color: '#999' }}>
+                    ({24 + (idx % 50)} reviews)
+                  </span>
+                </div>
+
+                {/* Bio */}
+                <p style={{ color: '#666', fontSize: '13px', marginBottom: '12px', lineHeight: '1.5', maxHeight: '60px', overflow: 'hidden' }}>{profile.bio}</p>
+
+                {/* Stats Row */}
                 <div style={{
-                  paddingTop: '16px',
-                  borderTop: `1px solid ${appleColors.silver}`,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '12px',
+                  marginBottom: '12px',
+                  paddingBottom: '12px',
+                  borderBottom: `1px solid ${appleColors.silver}`
                 }}>
-                  <span style={{ fontSize: '12px', color: '#999', fontWeight: '600' }}>Seeking: {profile.seeking_skill}</span>
-                  <button 
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '16px', fontWeight: '700', color: appleColors.gray }}>
+                      {8 + (idx % 20)}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#999', fontWeight: '600' }}>
+                      Completed
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '16px', fontWeight: '700', color: appleColors.gray }}>
+                      {2 + (idx % 8)}h
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#999', fontWeight: '600' }}>
+                      Avg Response
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Section */}
+                <div style={{
+                  display: 'flex',
+                  gap: '8px',
+                  justifyContent: 'space-between'
+                }}>
+                  <button
                     onClick={() => handleSwap(profile.id)}
                     style={{
-                      color: appleColors.blue,
-                      fontWeight: '700',
+                      flex: 1,
+                      backgroundColor: appleColors.blue,
+                      color: 'white',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: '13px',
                       border: 'none',
-                      backgroundColor: 'transparent',
                       cursor: 'pointer',
-                      fontSize: '14px'
+                      transition: 'background-color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#0052a3';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = appleColors.blue;
                     }}
                   >
-                    Swap
+                    Message
+                  </button>
+                  <button
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'transparent',
+                      color: appleColors.gray,
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: '13px',
+                      border: `1px solid ${appleColors.silver}`,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = appleColors.white;
+                      e.currentTarget.style.borderColor = appleColors.gray;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.borderColor = appleColors.silver;
+                    }}
+                  >
+                    View
                   </button>
                 </div>
               </div>
