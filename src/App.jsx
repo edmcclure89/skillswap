@@ -4,31 +4,8 @@ import { supabase } from './supabaseClient';
 import Signup from './Signup';
 
 function App() {
-  const pathname = window.location.pathname;
-
-  // Route to Signup component if on /signup path
-  if (pathname === '/signup') {
-    return <Signup />;
-  }
-
   const [profiles, setProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
-  const appleColors = {
-    silver: '#e6e6e6',
-    gray: '#424245',
-    white: '#f5f5f7',
-    blue: '#0066cc',
-    orange: '#f56300'
-  };
-
-  const featuredPhotos = [
-    '/happy.jpg',
-    '/pexels-gustavo-fring-7447286.jpg',
-    '/pexels-kampus-5920774.jpg',
-    '/pexels-kindelmedia-8488020.jpg',
-    '/pexels-reyhandiptayana-6258540.jpg'
-  ];
 
   useEffect(() => {
     async function fetchProfiles() {
@@ -45,6 +22,29 @@ function App() {
     }
     fetchProfiles();
   }, []);
+
+  const pathname = window.location.pathname;
+
+  // Route to Signup component if on /signup path
+  if (pathname === '/signup') {
+    return <Signup />;
+  }
+
+  const appleColors = {
+    silver: '#e6e6e6',
+    gray: '#424245',
+    white: '#f5f5f7',
+    blue: '#0066cc',
+    orange: '#f56300'
+  };
+
+  const featuredPhotos = [
+    '/happy.jpg',
+    '/pexels-gustavo-fring-7447286.jpg',
+    '/pexels-kampus-5920774.jpg',
+    '/pexels-kindelmedia-8488020.jpg',
+    '/pexels-reyhandiptayana-6258540.jpg'
+  ];
 
   const handleJoin = () => {
     window.location.href = '/auth';
