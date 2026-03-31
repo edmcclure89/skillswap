@@ -236,3 +236,4 @@ function App() {
 }
 
 export default App;
+// Force rebuild - trigger Vercel redeploy
