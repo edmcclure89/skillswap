@@ -86,14 +86,14 @@ function App() {
 
       {/* Hero Section */}
       <section style={{
-        backgroundColor: appleColors.gray,
-        color: 'white',
+        backgroundColor: appleColors.white,
+        color: appleColors.gray,
         padding: '96px 32px',
         textAlign: 'center'
       }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '48px', fontWeight: '900', marginBottom: '16px' }}>Your skills are currency</h2>
-          <p style={{ fontSize: '20px', color: appleColors.silver, marginBottom: '32px' }}>Match with people who have what you need and need what you have. Zero dollars exchanged.</p>
+          <p style={{ fontSize: '20px', color: appleColors.gray, marginBottom: '32px' }}>Match with people who have what you need and need what you have. Zero dollars exchanged.</p>
 
           {/* Search Bar */}
           <div style={{
