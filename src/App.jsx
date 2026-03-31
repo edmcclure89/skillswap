@@ -9,6 +9,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [showTerms, setShowTerms] = useState(false);
+  const [pathname, setPathname] = useState(window.location.pathname);
 
   useEffect(() => {
     async function fetchProfiles() {
@@ -26,7 +27,32 @@ function App() {
     fetchProfiles();
   }, []);
 
-  const pathname = window.location.pathname;
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setPathname(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+
+    const originalPushState = window.history.pushState;
+    const originalReplaceState = window.history.replaceState;
+
+    window.history.pushState = function(...args) {
+      originalPushState.apply(this, args);
+      setPathname(window.location.pathname);
+    };
+
+    window.history.replaceState = function(...args) {
+      originalReplaceState.apply(this, args);
+      setPathname(window.location.pathname);
+    };
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
+    };
+  }, []);
 
   // Route to Signup component if on /signup path
   if (pathname === '/signup') {
