@@ -46,11 +46,11 @@ function App() {
   };
 
   const featuredPhotos = [
-    '/happy.jpg',
-    '/pexels-gustavo-fring-7447286.jpg',
-    '/pexels-kampus-5920774.jpg',
-    '/pexels-kindelmedia-8488020.jpg',
-    '/pexels-reyhandiptayana-6258540.jpg'
+    '/images/happy.jpg',
+    '/images/pexels-gustavo-fring-7447286.jpg',
+    '/images/pexels-kampus-5920774.jpg',
+    '/images/pexels-kindelmedia-8488020.jpg',
+    '/images/pexels-reyhandiptayana-6258540.jpg'
   ];
 
   const handleJoin = () => {

@@ -2,7 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Add this below just in case the engine is being stubborn */
+/* Image sizing for profile cards and featured photos */
 img {
-  max-width: 100px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.profile-image {
+  max-width: 200px;
+  width: 100%;
+}
+
+.featured-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
