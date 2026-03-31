@@ -1,8 +1,16 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
+import Signup from './Signup';
 
 function App() {
+  const pathname = window.location.pathname;
+
+  // Route to Signup component if on /signup path
+  if (pathname === '/signup') {
+    return <Signup />;
+  }
+
   const [profiles, setProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
