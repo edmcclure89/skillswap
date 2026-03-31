@@ -2,10 +2,13 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
 import Signup from './Signup';
+import Auth from './Auth';
 
 function App() {
   const [profiles, setProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [showTerms, setShowTerms] = useState(false);
 
   useEffect(() => {
     async function fetchProfiles() {
@@ -29,6 +32,10 @@ function App() {
   if (pathname === '/signup') {
     return <Signup />;
   }
+
+  const handleAuthClose = () => {
+    window.location.href = '/';
+  };
 
   const appleColors = {
     silver: '#e6e6e6',
@@ -231,6 +238,15 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Auth modal for /auth route */}
+      {pathname === '/auth' && (
+        <Auth
+          onClose={handleAuthClose}
+          onShowTerms={() => setShowTerms(true)}
+          refCode={null}
+        />
+      )}
     </div>
   );
 }
