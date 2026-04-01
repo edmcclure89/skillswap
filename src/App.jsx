@@ -48,9 +48,9 @@ function App() {
 
   const skillCategories = [
     { name: 'Chef', image: '/images/pexels-gustavo-fring-7447286.jpg' },
-    { name: 'Crafts', image: '/images/pexels-kampus-5920774.jpg' },
+    { name: 'Crafts', image: '/images/pexels-amina-filkins-5410081.jpg' },
     { name: 'Building', image: '/images/pexels-kindelmedia-8488020.jpg' },
-    { name: 'Design', image: '/images/pexels-reyhandiptayana-6258540.jpg' }
+    { name: 'Design', image: '/images/pexels-anna-nekrashevich-7552713.jpg' }
   ];
 
   const handleAuthClose = () => {
