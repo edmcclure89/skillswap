@@ -1,9 +1,12 @@
 import Stripe from "https://esm.sh/stripe@14.21.0";
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
 
+const ALLOWED_ORIGIN = Deno.env.get("SITE_URL") || "https://skillswap.vercel.app";
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
 serve(async (req) => {

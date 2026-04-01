@@ -47,7 +47,6 @@ function App() {
   };
 
   const skillCategories = [
-    { name: 'Baking', image: '/images/happy.jpg' },
     { name: 'Construction', image: '/images/pexels-gustavo-fring-7447286.jpg' },
     { name: 'Education', image: '/images/pexels-kampus-5920774.jpg' },
     { name: 'Coaching', image: '/images/pexels-kindelmedia-8488020.jpg' },
@@ -443,6 +442,49 @@ function App() {
               }}>
               Search
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Hero Section with Happy Photo */}
+      <section style={{ padding: '64px 32px', backgroundColor: appleColors.white }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '48px',
+            alignItems: 'center'
+          }}>
+            <div>
+              <img
+                src="/images/happy.jpg"
+                alt="Your skills are currency"
+                style={{
+                  width: '100%',
+                  borderRadius: '16px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)'
+                }}
+              />
+            </div>
+            <div>
+              <h2 style={{
+                fontSize: '48px',
+                fontWeight: '700',
+                color: appleColors.gray,
+                lineHeight: '1.2',
+                marginBottom: '24px'
+              }}>
+                your skills are currency
+              </h2>
+              <p style={{
+                fontSize: '18px',
+                color: appleColors.gray,
+                lineHeight: '1.6',
+                opacity: '0.8'
+              }}>
+                Connect with people who value what you know. Trade your expertise, learn new skills, and grow your network without spending money.
+              </p>
+            </div>
           </div>
         </div>
       </section>
