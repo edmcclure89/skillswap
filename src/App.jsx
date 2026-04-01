@@ -446,48 +446,22 @@ function App() {
         </div>
       </section>
 
-      {/* Hero Section with Happy Photo */}
-      <section style={{ padding: '64px 32px', backgroundColor: appleColors.white }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '48px',
-            alignItems: 'center'
-          }}>
-            <div>
-              <img
-                src="/images/happy.jpg"
-                alt="Your skills are currency"
-                style={{
-                  width: '100%',
-                  borderRadius: '16px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)'
-                }}
-              />
-            </div>
-            <div>
-              <h2 style={{
-                fontSize: '48px',
-                fontWeight: '700',
-                color: appleColors.gray,
-                lineHeight: '1.2',
-                marginBottom: '24px'
-              }}>
-                your skills are currency
-              </h2>
-              <p style={{
-                fontSize: '18px',
-                color: appleColors.gray,
-                lineHeight: '1.6',
-                opacity: '0.8'
-              }}>
-                Connect with people who value what you know. Trade your expertise, learn new skills, and grow your network without spending money.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Top Hero Photo */}
+      <div style={{
+        width: '100%',
+        height: '400px',
+        overflow: 'hidden'
+      }}>
+        <img
+          src="/images/happy.jpg"
+          alt="Your skills are currency"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
+          }}
+        />
+      </div>
 
       {/* Featured Skill Categories */}
       <section style={{ padding: '64px 32px', backgroundColor: appleColors.white }}>
