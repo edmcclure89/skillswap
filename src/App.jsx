@@ -4,12 +4,70 @@ import { supabase } from './supabaseClient';
 import Signup from './Signup';
 import Auth from './Auth';
 
+// Static seed profiles — 3 per category, all accounts tied to edmcclure89@gmail.com
+const STATIC_PROFILES = [
+  // Baking
+  { id: 'static-1', full_name: 'Maria Santos', primary_skill: 'Baking', seeking_skill: 'Social media marketing', bio: 'Professional pastry chef with 12 years in artisan bakeries. Specialize in sourdough, pastries, and wedding cakes.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-2', full_name: 'Tom Baker', primary_skill: 'Baking', seeking_skill: 'Photography for food content', bio: 'Home baker turned cottage business owner. Known for custom birthday cakes and French macarons.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-3', full_name: 'Angela Kim', primary_skill: 'Baking', seeking_skill: 'Website design', bio: 'Korean-American baker blending traditional techniques with modern flavors. Pop-up shop owner.', email: 'edmcclure89@gmail.com' },
+  // Construction
+  { id: 'static-4', full_name: 'Carlos Mendez', primary_skill: 'Construction', seeking_skill: 'Accounting and bookkeeping', bio: 'Licensed general contractor with 15 years building custom homes and renovations. Specializes in kitchen and bath.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-5', full_name: 'Jake Morrison', primary_skill: 'Construction', seeking_skill: 'Digital marketing', bio: 'Carpentry specialist and woodworker. Expert in custom cabinets, decks, and structural repairs.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-6', full_name: 'Rosa Delgado', primary_skill: 'Construction', seeking_skill: 'Business coaching', bio: 'Licensed electrician and general contractor. First woman-owned electrical company in my county. 200+ projects completed.', email: 'edmcclure89@gmail.com' },
+  // Education
+  { id: 'static-7', full_name: 'James Wilson', primary_skill: 'Education', seeking_skill: 'Social media management', bio: 'Career coach with 10+ years helping executives and entrepreneurs. Former HR director at a Fortune 500.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-8', full_name: 'Aisha Okafor', primary_skill: 'Education', seeking_skill: 'Web development', bio: 'High school math teacher and private tutor. Makes calculus approachable for even the most math-averse students.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-9', full_name: 'Daniel Park', primary_skill: 'Education', seeking_skill: 'Graphic design', bio: 'ESL instructor and language learning specialist. Have taught in 6 countries over 10 years.', email: 'edmcclure89@gmail.com' },
+  // Coaching
+  { id: 'static-10', full_name: 'Priya Kapoor', primary_skill: 'Coaching', seeking_skill: 'Business strategy', bio: 'Certified yoga instructor and wellness coach. Specialize in corporate wellness programs and burnout recovery.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-11', full_name: 'Mike Torres', primary_skill: 'Coaching', seeking_skill: 'Video editing', bio: 'Certified life and performance coach. Work with athletes, founders, and creatives to break through mental blocks.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-12', full_name: 'Lauren Hayes', primary_skill: 'Coaching', seeking_skill: 'Photography', bio: 'Nutritionist and health coach. Specialize in sustainable weight management without fad diets or quick fixes.', email: 'edmcclure89@gmail.com' },
+  // Design
+  { id: 'static-13', full_name: 'Marcus Rodriguez', primary_skill: 'Design', seeking_skill: 'Spanish language tutoring', bio: 'Graphic designer with portfolio across tech startups and e-commerce brands. Minimalist aesthetic focus.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-14', full_name: 'Nina Bergstrom', primary_skill: 'Design', seeking_skill: 'Branding consultation', bio: 'Interior designer specializing in residential spaces. Virtual consultations available. Scandinavian-inspired style.', email: 'edmcclure89@gmail.com' },
+  { id: 'static-15', full_name: 'Chris Anderson', primary_skill: 'Design', seeking_skill: 'Website development', bio: 'Video producer and motion graphics designer. Experience in YouTube, TikTok, and brand promotional content.', email: 'edmcclure89@gmail.com' },
+];
+
 function App() {
   const [profiles, setProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [showTerms, setShowTerms] = useState(false);
   const [pathname, setPathname] = useState(window.location.pathname);
+
+  // Define constants before they're used in early returns
+  const appleColors = {
+    silver: '#e6e6e6',
+    gray: '#424245',
+    white: '#f5f5f7',
+    blue: '#0066cc',
+    orange: '#f56300'
+  };
+
+  const skillCategories = [
+    { name: 'Baking', image: '/images/happy.jpg' },
+    { name: 'Construction', image: '/images/pexels-gustavo-fring-7447286.jpg' },
+    { name: 'Education', image: '/images/pexels-kampus-5920774.jpg' },
+    { name: 'Coaching', image: '/images/pexels-kindelmedia-8488020.jpg' },
+    { name: 'Design', image: '/images/pexels-reyhandiptayana-6258540.jpg' }
+  ];
+
+  const handleAuthClose = () => {
+    window.location.href = '/';
+  };
+
+  const handleJoin = () => {
+    window.location.href = '/auth';
+  };
+
+  const handleSwap = (profileId) => {
+    console.log('Swap initiated with:', profileId);
+  };
+
+  const handleCategoryClick = (categoryName) => {
+    window.history.pushState(null, '', `/category/${categoryName.toLowerCase()}`);
+    setPathname(`/category/${categoryName.toLowerCase()}`);
+  };
 
   useEffect(() => {
     async function fetchProfiles() {
@@ -54,6 +112,101 @@ function App() {
     };
   }, []);
 
+  const SkillIcon = ({ skill }) => {
+    const getSkillIcon = (skillName) => {
+      const skillLower = (skillName || '').toLowerCase();
+      if (skillLower.includes('cook') || skillLower.includes('bak')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        );
+      } else if (skillLower.includes('design') || skillLower.includes('art')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
+            <circle cx="12" cy="12" r="1" />
+            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m2.12 2.12l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m2.12-2.12l4.24-4.24" />
+          </svg>
+        );
+      } else if (skillLower.includes('build') || skillLower.includes('construct')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
+            <path d="M6 9l6-6 6 6v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z" />
+            <rect x="9" y="9" width="6" height="6" />
+          </svg>
+        );
+      } else if (skillLower.includes('teach') || skillLower.includes('coach') || skillLower.includes('education')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
+        );
+      } else if (skillLower.includes('music')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
+            <path d="M9 18V5l12-2v13a4 4 0 1 1-4 4M9 9h12" />
+          </svg>
+        );
+      } else if (skillLower.includes('tech') || skillLower.includes('code') || skillLower.includes('software')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+        );
+      } else if (skillLower.includes('fitness') || skillLower.includes('yoga')) {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
+            <circle cx="12" cy="5" r="1.5" />
+            <path d="M12 6.5v5m-2-2l4 4m0-4l-4 4m8-8v8m-4-4h8" />
+          </svg>
+        );
+      } else {
+        return (
+          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+          </svg>
+        );
+      }
+    };
+    return (
+      <div style={{
+        width: '64px',
+        height: '64px',
+        borderRadius: '50%',
+        backgroundColor: appleColors.silver,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        <div style={{ width: '40px', height: '40px' }}>
+          {getSkillIcon(skill)}
+        </div>
+      </div>
+    );
+  };
+
+  // Merge live Supabase profiles with static profiles; deduplicate by name
+  const supabaseNames = new Set(profiles.map(p => (p.full_name || '').toLowerCase()));
+  const mergedProfiles = [
+    ...profiles.map(p => ({ ...p, full_name: p.full_name || 'Anonymous' })),
+    ...STATIC_PROFILES.filter(sp => !supabaseNames.has(sp.full_name.toLowerCase()))
+  ];
+
+  // Filter profiles by search term (case-insensitive)
+  const filteredProfiles = mergedProfiles.filter(p => {
+    if (!searchTerm.trim()) return true;
+    const term = searchTerm.toLowerCase();
+    return (
+      (p.primary_skill && p.primary_skill.toLowerCase().includes(term)) ||
+      (p.seeking_skill && p.seeking_skill.toLowerCase().includes(term)) ||
+      (p.full_name && p.full_name.toLowerCase().includes(term)) ||
+      (p.bio && p.bio.toLowerCase().includes(term))
+    );
+  });
+
   // Route to Signup component if on /signup path
   if (pathname === '/signup') {
     return <Signup />;
@@ -64,9 +217,21 @@ function App() {
   if (categoryMatch) {
     const categoryName = categoryMatch[1];
     const categoryDisplayName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    const categoryProfiles = profiles.filter(p =>
-      p.primary_skill.toLowerCase().includes(categoryName.toLowerCase())
+
+    // Get static profiles for this category (always 2-5 shown)
+    const staticForCategory = STATIC_PROFILES.filter(p =>
+      p.primary_skill.toLowerCase() === categoryName.toLowerCase()
     );
+    // Get live profiles matching category, fill in with static if not enough
+    const liveForCategory = profiles.filter(p =>
+      (p.primary_skill || '').toLowerCase().includes(categoryName.toLowerCase())
+    );
+    const liveNames = new Set(liveForCategory.map(p => (p.full_name || '').toLowerCase()));
+    const combined = [
+      ...liveForCategory,
+      ...staticForCategory.filter(sp => !liveNames.has(sp.full_name.toLowerCase()))
+    ];
+    const categoryProfiles = combined;
 
     return (
       <div style={{ minHeight: '100vh', backgroundColor: appleColors.white, fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
@@ -130,9 +295,9 @@ function App() {
                     }}
                   >
                     <div style={{ display: 'flex', gap: '16px', marginBottom: '16px', alignItems: 'flex-start' }}>
-                      <SkillIcon skill={profile.primary_skill} />
+                      <SkillIcon skill={profile.primary_skill || 'general'} />
                       <div style={{ flex: 1 }}>
-                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: appleColors.gray, margin: '0 0 8px 0' }}>{profile.full_name}</h2>
+                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: appleColors.gray, margin: '0 0 8px 0' }}>{profile.full_name || 'Anonymous'}</h2>
                         <span style={{
                           backgroundColor: appleColors.blue,
                           color: 'white',
@@ -142,7 +307,7 @@ function App() {
                           borderRadius: '20px',
                           display: 'inline-block'
                         }}>
-                          {profile.primary_skill}
+                          {profile.primary_skill || 'General'}
                         </span>
                       </div>
                     </div>
@@ -183,118 +348,6 @@ function App() {
     );
   }
 
-  const handleAuthClose = () => {
-    window.location.href = '/';
-  };
-
-  const appleColors = {
-    silver: '#e6e6e6',
-    gray: '#424245',
-    white: '#f5f5f7',
-    blue: '#0066cc',
-    orange: '#f56300'
-  };
-
-  const skillCategories = [
-    { name: 'Baking', image: '/images/happy.jpg' },
-    { name: 'Construction', image: '/images/pexels-gustavo-fring-7447286.jpg' },
-    { name: 'Education', image: '/images/pexels-kampus-5920774.jpg' },
-    { name: 'Coaching', image: '/images/pexels-kindelmedia-8488020.jpg' },
-    { name: 'Design', image: '/images/pexels-reyhandiptayana-6258540.jpg' }
-  ];
-
-  const handleJoin = () => {
-    window.location.href = '/auth';
-  };
-
-  const handleSwap = (profileId) => {
-    console.log('Swap initiated with:', profileId);
-  };
-
-  const handleCategoryClick = (categoryName) => {
-    window.history.pushState(null, '', `/category/${categoryName.toLowerCase()}`);
-    setPathname(`/category/${categoryName.toLowerCase()}`);
-  };
-
-  const SkillIcon = ({ skill }) => {
-    const getSkillIcon = (skillName) => {
-      const skillLower = skillName.toLowerCase();
-
-      // Return SVG icons based on skill type
-      if (skillLower.includes('cook') || skillLower.includes('bak')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-        );
-      } else if (skillLower.includes('design') || skillLower.includes('art')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
-            <circle cx="12" cy="12" r="1" />
-            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m2.12 2.12l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m2.12-2.12l4.24-4.24" />
-          </svg>
-        );
-      } else if (skillLower.includes('build') || skillLower.includes('construct')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
-            <path d="M6 9l6-6 6 6v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z" />
-            <rect x="9" y="9" width="6" height="6" />
-          </svg>
-        );
-      } else if (skillLower.includes('teach') || skillLower.includes('coach') || skillLower.includes('education')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-          </svg>
-        );
-      } else if (skillLower.includes('music')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
-            <path d="M9 18V5l12-2v13a4 4 0 1 1-4 4M9 9h12" />
-          </svg>
-        );
-      } else if (skillLower.includes('tech') || skillLower.includes('code') || skillLower.includes('software')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
-            <polyline points="16 18 22 12 16 6" />
-            <polyline points="8 6 2 12 8 18" />
-          </svg>
-        );
-      } else if (skillLower.includes('fitness') || skillLower.includes('yoga')) {
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.orange} strokeWidth="2">
-            <circle cx="12" cy="5" r="1.5" />
-            <path d="M12 6.5v5m-2-2l4 4m0-4l-4 4m8-8v8m-4-4h8" />
-          </svg>
-        );
-      } else {
-        // Default skill icon
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke={appleColors.blue} strokeWidth="2">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
-          </svg>
-        );
-      }
-    };
-
-    return (
-      <div style={{
-        width: '64px',
-        height: '64px',
-        borderRadius: '50%',
-        backgroundColor: appleColors.silver,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0
-      }}>
-        <div style={{ width: '40px', height: '40px' }}>
-          {getSkillIcon(skill)}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: appleColors.white, fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
@@ -423,7 +476,7 @@ function App() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: '24px'
           }}>
-            {profiles.map((profile, idx) => (
+            {filteredProfiles.map((profile, idx) => (
               <div
                 key={profile.id}
                 style={{
@@ -460,9 +513,9 @@ function App() {
 
                 {/* Header with Icon and Name */}
                 <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', alignItems: 'flex-start' }}>
-                  <SkillIcon skill={profile.primary_skill} />
+                  <SkillIcon skill={profile.primary_skill || 'general'} />
                   <div style={{ flex: 1, marginTop: '2px' }}>
-                    <h2 style={{ fontSize: '16px', fontWeight: '700', color: appleColors.gray, margin: '0 0 6px 0' }}>{profile.full_name}</h2>
+                    <h2 style={{ fontSize: '16px', fontWeight: '700', color: appleColors.gray, margin: '0 0 6px 0' }}>{profile.full_name || 'Anonymous'}</h2>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
                       <span style={{
                         backgroundColor: idx % 2 === 0 ? appleColors.blue : appleColors.orange,
@@ -473,7 +526,7 @@ function App() {
                         borderRadius: '12px',
                         display: 'inline-block'
                       }}>
-                        {profile.primary_skill}
+                        {profile.primary_skill || 'General'}
                       </span>
                       <span style={{
                         backgroundColor: '#f0f0f0',
@@ -589,6 +642,44 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer style={{
+        backgroundColor: appleColors.gray,
+        color: appleColors.silver,
+        padding: '48px 32px 24px',
+        marginTop: '64px'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '32px', marginBottom: '32px' }}>
+            <div>
+              <h4 style={{ fontSize: '20px', fontWeight: '700', color: 'white', marginBottom: '12px' }}>SkillSwap</h4>
+              <p style={{ fontSize: '14px', color: '#999', maxWidth: '300px', lineHeight: '1.6' }}>
+                Trade skills, not dollars. Connect with people who have what you need and need what you have.
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '600', color: 'white', marginBottom: '12px' }}>Company</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <button onClick={() => setShowTerms(true)} style={{ background: 'none', border: 'none', color: '#999', fontSize: '13px', cursor: 'pointer', textAlign: 'left', padding: 0 }}>Terms of Service</button>
+                  <button onClick={() => setShowTerms(true)} style={{ background: 'none', border: 'none', color: '#999', fontSize: '13px', cursor: 'pointer', textAlign: 'left', padding: 0 }}>Privacy Policy</button>
+                </div>
+              </div>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '600', color: 'white', marginBottom: '12px' }}>Get Started</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <button onClick={handleJoin} style={{ background: 'none', border: 'none', color: '#999', fontSize: '13px', cursor: 'pointer', textAlign: 'left', padding: 0 }}>Sign Up</button>
+                  <button onClick={handleJoin} style={{ background: 'none', border: 'none', color: '#999', fontSize: '13px', cursor: 'pointer', textAlign: 'left', padding: 0 }}>Post a Skill</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ borderTop: '1px solid #555', paddingTop: '16px', textAlign: 'center' }}>
+            <p style={{ fontSize: '12px', color: '#777' }}>2026 SkillSwap. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
 
       {/* Auth modal for /auth route */}
       {pathname === '/auth' && (
