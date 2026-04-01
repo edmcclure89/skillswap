@@ -391,6 +391,23 @@ function App() {
         </div>
       </header>
 
+      {/* Top Hero Photo */}
+      <div style={{
+        width: '100%',
+        height: '400px',
+        overflow: 'hidden'
+      }}>
+        <img
+          src="/images/happy.jpg"
+          alt="Your skills are currency"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
+          }}
+        />
+      </div>
+
       {/* Hero Section */}
       <section style={{
         backgroundColor: appleColors.white,
@@ -445,23 +462,6 @@ function App() {
           </div>
         </div>
       </section>
-
-      {/* Top Hero Photo */}
-      <div style={{
-        width: '100%',
-        height: '400px',
-        overflow: 'hidden'
-      }}>
-        <img
-          src="/images/happy.jpg"
-          alt="Your skills are currency"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-          }}
-        />
-      </div>
 
       {/* Featured Skill Categories */}
       <section style={{ padding: '64px 32px', backgroundColor: appleColors.white }}>
