@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
 import Signup from './Signup';
 import Auth from './Auth';
+import Terms from './Terms';
 
 // Static seed profiles — 3 per category, all accounts tied to edmcclure89@gmail.com
 const STATIC_PROFILES = [
@@ -31,8 +32,9 @@ const STATIC_PROFILES = [
 function App() {
   const [profiles, setProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  // eslint-disable-next-line no-unused-vars
+  const [pendingSearch, setPendingSearch] = useState('');
   const [showTerms, setShowTerms] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [pathname, setPathname] = useState(window.location.pathname);
 
   // Define constants before they're used in early returns
@@ -61,7 +63,13 @@ function App() {
   };
 
   const handleSwap = (profileId) => {
-    console.log('Swap initiated with:', profileId);
+    if (currentUser) {
+      window.history.pushState(null, '', `/profile/${profileId}`);
+      setPathname(`/profile/${profileId}`);
+    } else {
+      window.history.pushState(null, '', '/auth');
+      setPathname('/auth');
+    }
   };
 
   const handleCategoryClick = (categoryName) => {
@@ -83,6 +91,15 @@ function App() {
       }
     }
     fetchProfiles();
+
+    // Track auth state for gating swap/view actions
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setCurrentUser(session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setCurrentUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -195,8 +212,11 @@ function App() {
     ...STATIC_PROFILES.filter(sp => !supabaseNames.has(sp.full_name.toLowerCase()))
   ];
 
-  // Filter profiles by search term (case-insensitive)
+  // Filter profiles by search term (case-insensitive) and exclude anonymous profiles
   const filteredProfiles = mergedProfiles.filter(p => {
+    // Exclude anonymous profiles from front page
+    if (p.full_name === 'Anonymous') return false;
+
     if (!searchTerm.trim()) return true;
     const term = searchTerm.toLowerCase();
     return (
@@ -398,8 +418,9 @@ function App() {
             <input
               type="text"
               placeholder="Search a skill..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={pendingSearch}
+              onChange={(e) => setPendingSearch(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') setSearchTerm(pendingSearch); }}
               style={{
                 flex: 1,
                 padding: '12px 24px',
@@ -409,15 +430,17 @@ function App() {
                 borderRadius: '8px'
               }}
             />
-            <button style={{
-              backgroundColor: appleColors.blue,
-              color: 'white',
-              padding: '12px 32px',
-              borderRadius: '8px',
-              fontWeight: '700',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
+            <button
+              onClick={() => setSearchTerm(pendingSearch)}
+              style={{
+                backgroundColor: appleColors.blue,
+                color: 'white',
+                padding: '12px 32px',
+                borderRadius: '8px',
+                fontWeight: '700',
+                border: 'none',
+                cursor: 'pointer'
+              }}>
               Search
             </button>
           </div>
@@ -613,6 +636,10 @@ function App() {
                     Message
                   </button>
                   <button
+                    onClick={() => {
+                      window.history.pushState(null, '', `/profile/${profile.id}`);
+                      setPathname(`/profile/${profile.id}`);
+                    }}
                     style={{
                       flex: 1,
                       backgroundColor: 'transparent',
@@ -688,6 +715,25 @@ function App() {
           onShowTerms={() => setShowTerms(true)}
           refCode={null}
         />
+      )}
+
+      {/* Terms modal — shown when setShowTerms(true) is called */}
+      {showTerms && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+          onClick={() => setShowTerms(false)}
+        >
+          <div
+            style={{ background: '#13131A', border: '1px solid #2a2a35', borderRadius: 20, maxWidth: 640, width: '100%', maxHeight: '80vh', overflowY: 'auto', position: 'relative' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowTerms(false)}
+              style={{ position: 'absolute', top: 16, right: 16, background: 'transparent', border: 'none', color: '#6B6B78', cursor: 'pointer', fontSize: 20 }}
+            >✕</button>
+            <Terms />
+          </div>
+        </div>
       )}
     </div>
   );
