@@ -47,9 +47,9 @@ function App() {
   };
 
   const skillCategories = [
-    { name: 'Construction', image: '/images/pexels-gustavo-fring-7447286.jpg' },
-    { name: 'Education', image: '/images/pexels-kampus-5920774.jpg' },
-    { name: 'Coaching', image: '/images/pexels-kindelmedia-8488020.jpg' },
+    { name: 'Chef', image: '/images/pexels-gustavo-fring-7447286.jpg' },
+    { name: 'Crafts', image: '/images/pexels-kampus-5920774.jpg' },
+    { name: 'Building', image: '/images/pexels-kindelmedia-8488020.jpg' },
     { name: 'Design', image: '/images/pexels-reyhandiptayana-6258540.jpg' }
   ];
 
