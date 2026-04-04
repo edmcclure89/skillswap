@@ -4,6 +4,7 @@ import { supabase } from './supabaseClient';
 import Signup from './Signup';
 import Auth from './Auth';
 import Terms from './Terms';
+import FreeSwapPromo from './FreeSwapPromo';
 
 // Static seed profiles — 3 per category, all accounts tied to edmcclure89@gmail.com
 const STATIC_PROFILES = [
@@ -36,6 +37,8 @@ function App() {
   const [showTerms, setShowTerms] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [pathname, setPathname] = useState(window.location.pathname);
+  const [userJustLoggedIn, setUserJustLoggedIn] = useState(false);
+  const [showPromo, setShowPromo] = useState(false);
 
   // Define constants before they're used in early returns
   const appleColors = {
@@ -95,8 +98,14 @@ function App() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setCurrentUser(session?.user ?? null);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setCurrentUser(session?.user ?? null);
+      if (event === 'SIGNED_IN' && session?.user) {
+        setUserJustLoggedIn(true);
+        setTimeout(() => {
+          setShowPromo(true);
+        }, 2000);
+      }
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -417,7 +426,7 @@ function App() {
       }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '48px', fontWeight: '900', marginBottom: '16px' }}>Your skills are currency</h2>
-          <p style={{ fontSize: '20px', color: appleColors.gray, marginBottom: '32px' }}>Match with people who have what you need and need what you have. Zero dollars exchanged.</p>
+          <p style={{ fontSize: '20px', color: appleColors.gray, marginBottom: '32px' }}>Get your first swap free. Bring a friend and you both get 2 free swaps.</p>
 
           {/* Search Bar */}
           <div style={{
@@ -751,6 +760,13 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Free Swap Promo Popup */}
+      <FreeSwapPromo
+        currentUser={currentUser}
+        showPromo={showPromo}
+        onClose={() => setShowPromo(false)}
+      />
     </div>
   );
 }

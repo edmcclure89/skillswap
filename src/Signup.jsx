@@ -7,7 +7,9 @@ export default function Signup() {
     username: "",
     first_name: "",
     last_name: "",
-    city: ""
+    city: "",
+    password: "",
+    confirmPassword: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,32 +30,17 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      // Validate required fields
-      if (!formData.email.trim()) {
-        setError("Email is required");
-        setLoading(false);
-        return;
-      }
-      if (!formData.username.trim()) {
-        setError("Username is required");
-        setLoading(false);
-        return;
-      }
-      if (!formData.first_name.trim()) {
-        setError("First name is required");
-        setLoading(false);
-        return;
-      }
-      if (!formData.last_name.trim()) {
-        setError("Last name is required");
-        setLoading(false);
-        return;
-      }
+      if (!formData.email.trim()) { setError("Email is required"); setLoading(false); return; }
+      if (!formData.username.trim()) { setError("Username is required"); setLoading(false); return; }
+      if (!formData.first_name.trim()) { setError("First name is required"); setLoading(false); return; }
+      if (!formData.last_name.trim()) { setError("Last name is required"); setLoading(false); return; }
+      if (!formData.password) { setError("Password is required"); setLoading(false); return; }
+      if (formData.password.length < 12) { setError("Password must be at least 12 characters"); setLoading(false); return; }
+      if (formData.password !== formData.confirmPassword) { setError("Passwords do not match"); setLoading(false); return; }
 
-      // Create account with Supabase
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
-        password: formData.username, // Using username as password for now
+        password: formData.password,
         options: {
           data: {
             full_name: `${formData.first_name} ${formData.last_name}`,
@@ -66,7 +53,6 @@ export default function Signup() {
       if (signUpError) {
         setError(signUpError.message);
       } else {
-        // Save profile data
         if (data?.user) {
           await supabase.from("profiles").upsert({
             id: data.user.id,
@@ -76,7 +62,7 @@ export default function Signup() {
           });
         }
         setSuccess("Account created! Check your email to confirm.");
-        setFormData({ email: "", username: "", first_name: "", last_name: "", city: "" });
+        setFormData({ email: "", username: "", first_name: "", last_name: "", city: "", password: "", confirmPassword: "" });
       }
     } catch (err) {
       setError(err.message || "An error occurred");
@@ -94,94 +80,50 @@ export default function Signup() {
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "16px" }}>
             <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="you@email.com"
-              style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }}
-            />
+            <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@email.com" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
           </div>
 
           <div style={{ marginBottom: "16px" }}>
             <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Username</label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Choose a username"
-              style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }}
-            />
+            <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Choose a username" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>First Name</label>
-              <input
-                type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-                placeholder="First"
-                style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }}
-              />
+              <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="First" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
             </div>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Last Name</label>
-              <input
-                type="text"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleChange}
-                placeholder="Last"
-                style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }}
-              />
+              <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Last" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
             </div>
+          </div>
+
+          <div style={{ marginBottom: "16px" }}>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>City (Optional)</label>
+            <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Your city" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
+          </div>
+
+          <div style={{ marginBottom: "16px" }}>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Password</label>
+            <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="At least 12 characters" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
+            {formData.password && formData.password.length < 12 && (
+              <p style={{ fontSize: "11px", color: "#dc2626", marginTop: "4px" }}>{formData.password.length}/12 characters minimum</p>
+            )}
           </div>
 
           <div style={{ marginBottom: "24px" }}>
-            <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>City (Optional)</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              placeholder="Your city"
-              style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }}
-            />
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#424245", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Confirm Password</label>
+            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Repeat your password" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: formData.confirmPassword && formData.password !== formData.confirmPassword ? "1px solid #fca5a5" : "1px solid #e6e6e6", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" }} />
+            {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+              <p style={{ fontSize: "11px", color: "#dc2626", marginTop: "4px" }}>Passwords do not match</p>
+            )}
           </div>
 
-          {error && (
-            <div style={{ backgroundColor: "#fee2e2", border: "1px solid #fca5a5", borderRadius: "8px", padding: "12px", marginBottom: "16px", fontSize: "13px", color: "#dc2626" }}>
-              {error}
-            </div>
-          )}
+          {error && <div style={{ backgroundColor: "#fee2e2", border: "1px solid #fca5a5", borderRadius: "8px", padding: "12px", marginBottom: "16px", fontSize: "13px", color: "#dc2626" }}>{error}</div>}
+          {success && <div style={{ backgroundColor: "#d1fae5", border: "1px solid #6ee7b7", borderRadius: "8px", padding: "12px", marginBottom: "16px", fontSize: "13px", color: "#047857" }}>{success}</div>}
 
-          {success && (
-            <div style={{ backgroundColor: "#d1fae5", border: "1px solid #6ee7b7", borderRadius: "8px", padding: "12px", marginBottom: "16px", fontSize: "13px", color: "#047857" }}>
-              {success}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              backgroundColor: "#0066cc",
-              color: "white",
-              padding: "14px",
-              borderRadius: "8px",
-              border: "none",
-              fontSize: "14px",
-              fontWeight: "600",
-              cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.7 : 1,
-              fontFamily: "inherit"
-            }}
-          >
+          <button type="submit" disabled={loading} style={{ width: "100%", backgroundColor: "#0066cc", color: "white", padding: "14px", borderRadius: "8px", border: "none", fontSize: "14px", fontWeight: "600", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1, fontFamily: "inherit" }}>
             {loading ? "Creating account..." : "Sign Up"}
           </button>
 
