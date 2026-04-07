@@ -7,3 +7,6 @@ build/
 dist/
 *.log
 .env
+node_modules/
+SECURITY_REPORT_*
+.env*
