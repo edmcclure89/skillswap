@@ -19,7 +19,7 @@ if (!STRIPE_SECRET_KEY) {
   throw new Error('[create-checkout-session] Missing STRIPE_SECRET_KEY');
 }
 
-const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2024-04-10' });
+const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {

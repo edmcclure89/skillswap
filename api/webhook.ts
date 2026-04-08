@@ -36,7 +36,7 @@ for (const [name, val] of Object.entries({
 }
 
 // ── Clients ──────────────────────────────────────────────────────────────────
-const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2024-04-10' });
+const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 // service_role client: bypasses RLS. Only used server-side.
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
