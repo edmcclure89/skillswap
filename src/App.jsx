@@ -80,34 +80,50 @@ function App() {
   };
 
   useEffect(() => {
-    async function fetchProfiles() {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
+    console.log('[SkillSwap] App mounted, initializing...');
 
-      if (error) {
-        console.error("Error fetching:", error);
-      } else {
-        setProfiles(data);
+    async function fetchProfiles() {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) {
+          console.error('[SkillSwap] Error fetching profiles:', error);
+        } else {
+          setProfiles(data || []);
+        }
+      } catch (err) {
+        console.error('[SkillSwap] fetchProfiles threw:', err);
       }
     }
     fetchProfiles();
 
     // Track auth state for gating swap/view actions
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setCurrentUser(session?.user ?? null);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setCurrentUser(session?.user ?? null);
-      if (event === 'SIGNED_IN' && session?.user) {
-        setUserJustLoggedIn(true);
-        setTimeout(() => {
-          setShowPromo(true);
-        }, 2000);
-      }
-    });
-    return () => subscription.unsubscribe();
+    let subscription = null;
+    try {
+      supabase.auth.getSession().then((result) => {
+        const session = result?.data?.session ?? null;
+        setCurrentUser(session?.user ?? null);
+      }).catch(err => console.error('[SkillSwap] getSession error:', err));
+
+      const authResult = supabase.auth.onAuthStateChange((event, session) => {
+        setCurrentUser(session?.user ?? null);
+        if (event === 'SIGNED_IN' && session?.user) {
+          setUserJustLoggedIn(true);
+          setTimeout(() => {
+            setShowPromo(true);
+          }, 2000);
+        }
+      });
+      subscription = authResult?.data?.subscription ?? null;
+    } catch (err) {
+      console.error('[SkillSwap] Auth init error:', err);
+    }
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
