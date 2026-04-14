@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function FreeSwapPromo({ currentUser, showPromo, onClose }) {
-  const [visible, setVisible] = useState(showPromo);
-  const [timerActive, setTimerActive] = useState(true);
-
   useEffect(() => {
-    if (!visible) return;
+    if (!showPromo) return;
 
-    if (timerActive) {
-      const timer = setTimeout(() => {
-        setVisible(false);
-        onClose();
-      }, 5000);
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [visible, timerActive, onClose]);
+    return () => clearTimeout(timer);
+  }, [showPromo, onClose]);
 
-  if (!visible) return null;
+  if (!showPromo) return null;
 
   return (
     <div
@@ -59,11 +53,7 @@ export default function FreeSwapPromo({ currentUser, showPromo, onClose }) {
           </div>
         </div>
         <button
-          onClick={() => {
-            setVisible(false);
-            onClose();
-            setTimerActive(false);
-          }}
+          onClick={onClose}
           style={{
             background: 'rgba(255, 255, 255, 0.2)',
             border: 'none',
@@ -82,7 +72,7 @@ export default function FreeSwapPromo({ currentUser, showPromo, onClose }) {
           }}
           aria-label="Close promo"
         >
-          ×
+          x
         </button>
       </div>
 
