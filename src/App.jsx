@@ -6,7 +6,7 @@ import Auth from './Auth';
 import Terms from './Terms';
 import FreeSwapPromo from './FreeSwapPromo';
 
-// Static seed profiles — 3 per category, all accounts tied to edmcclure89@gmail.com
+// Static seed profiles â 3 per category, all accounts tied to edmcclure89@gmail.com
 const STATIC_PROFILES = [
   // Baking
   { id: 'static-1', full_name: 'Maria Santos', primary_skill: 'Baking', seeking_skill: 'Social media marketing', bio: 'Professional pastry chef with 12 years in artisan bakeries. Specialize in sourdough, pastries, and wedding cakes.', email: 'edmcclure89@gmail.com' },
@@ -33,7 +33,6 @@ const STATIC_PROFILES = [
 function App() {
   const [profiles, setProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [pendingSearch, setPendingSearch] = useState('');
   const [showTerms, setShowTerms] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -50,18 +49,21 @@ function App() {
   };
 
   const skillCategories = [
-    { name: 'Chef', image: '/images/pexels-gustavo-fring-7447286.jpg' },
-    { name: 'Crafts', image: '/images/pexels-amina-filkins-5410081.jpg' },
-    { name: 'Building', image: '/images/pexels-kindelmedia-8488020.jpg' },
-    { name: 'Design', image: '/images/pexels-anna-nekrashevich-7552713.jpg' }
+    { name: 'Baking', image: '/images/pexels-gustavo-fring-7447286.jpg' },
+    { name: 'Construction', image: '/images/pexels-kindelmedia-8488020.jpg' },
+    { name: 'Coaching', image: '/images/pexels-amina-filkins-5410081.jpg' },
+    { name: 'Design', image: '/images/pexels-anna-nekrashevich-7552713.jpg' },
+    { name: 'Education', image: '/images/pexels-anna-nekrashevich-7552713.jpg' }
   ];
 
   const handleAuthClose = () => {
-    window.location.href = '/';
+    window.history.pushState(null, '', '/');
+    setPathname('/');
   };
 
   const handleJoin = () => {
-    window.location.href = '/auth';
+    window.history.pushState(null, '', '/auth');
+    setPathname('/auth');
   };
 
   const handleSwap = (profileId) => {
@@ -297,7 +299,7 @@ function App() {
                 cursor: 'pointer'
               }}
             >
-              ← SkillSwap
+              â SkillSwap
             </button>
           </div>
         </header>
@@ -393,6 +395,63 @@ function App() {
   }
 
 
+  // Route to Profile page if on /profile/:id path
+  const profileMatch = pathname.match(/^\/profile\/(.+)$/);
+  if (profileMatch) {
+    const profileId = profileMatch[1];
+    const profile = mergedProfiles.find(p => p.id === profileId) || mergedProfiles.find(p => String(p.id) === profileId);
+
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: appleColors.white, fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
+        <header style={{ backgroundColor: appleColors.gray, borderBottom: `1px solid ${appleColors.silver}`, padding: '16px 32px' }}>
+          <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button
+              onClick={() => { window.history.pushState(null, '', '/'); setPathname('/'); }}
+              style={{ fontSize: '28px', fontWeight: '700', color: appleColors.silver, margin: 0, border: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}
+            >
+              â SkillSwap
+            </button>
+          </div>
+        </header>
+        <section style={{ padding: '64px 32px', maxWidth: '700px', margin: '0 auto' }}>
+          {profile ? (
+            <div style={{ backgroundColor: 'white', borderRadius: 16, boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: 40 }}>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', marginBottom: 24 }}>
+                <SkillIcon skill={profile.primary_skill || 'general'} />
+                <div>
+                  <h2 style={{ fontSize: 28, fontWeight: 800, color: appleColors.gray, margin: 0 }}>{profile.full_name}</h2>
+                  <span style={{ backgroundColor: appleColors.blue, color: 'white', fontSize: 13, fontWeight: 600, padding: '4px 14px', borderRadius: 20, display: 'inline-block', marginTop: 8 }}>
+                    {profile.primary_skill || 'General'}
+                  </span>
+                </div>
+              </div>
+              <p style={{ color: '#555', fontSize: 16, lineHeight: 1.7, marginBottom: 24 }}>{profile.bio}</p>
+              <div style={{ padding: '16px 0', borderTop: `1px solid ${appleColors.silver}`, marginBottom: 24 }}>
+                <p style={{ fontSize: 14, color: '#888', fontWeight: 600 }}>Looking for: <span style={{ color: appleColors.gray }}>{profile.seeking_skill}</span></p>
+              </div>
+              <button
+                onClick={() => {
+                  if (!currentUser) { window.history.pushState(null, '', '/auth'); setPathname('/auth'); }
+                  else { alert('Message feature coming soon!'); }
+                }}
+                style={{ width: '100%', backgroundColor: appleColors.blue, color: 'white', padding: '14px 24px', borderRadius: 10, fontWeight: 700, fontSize: 16, border: 'none', cursor: 'pointer' }}
+              >
+                {currentUser ? 'Send Message' : 'Sign In to Message'}
+              </button>
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: 64 }}>
+              <p style={{ fontSize: 18, color: '#999' }}>Profile not found.</p>
+              <button onClick={() => { window.history.pushState(null, '', '/'); setPathname('/'); }} style={{ marginTop: 16, color: appleColors.blue, background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 600 }}>
+                Back to Home
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: appleColors.white, fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
       {/* Navigation */}
@@ -458,10 +517,9 @@ function App() {
           }}>
             <input
               type="text"
-              placeholder="Search a skill..."
-              value={pendingSearch}
-              onChange={(e) => setPendingSearch(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') setSearchTerm(pendingSearch); }}
+              placeholder="Search a skill... (e.g. Baking, Design, Coaching)"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 flex: 1,
                 padding: '12px 24px',
@@ -471,19 +529,22 @@ function App() {
                 borderRadius: '8px'
               }}
             />
-            <button
-              onClick={() => setSearchTerm(pendingSearch)}
-              style={{
-                backgroundColor: appleColors.blue,
-                color: 'white',
-                padding: '12px 32px',
-                borderRadius: '8px',
-                fontWeight: '700',
-                border: 'none',
-                cursor: 'pointer'
-              }}>
-              Search
-            </button>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                style={{
+                  backgroundColor: '#ddd',
+                  color: '#666',
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  fontWeight: '700',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}>
+                Clear
+              </button>
+            )}
           </div>
         </div>
       </section>
@@ -534,7 +595,24 @@ function App() {
       {/* Traders Grid */}
       <section style={{ padding: '64px 32px' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '32px' }}>Trending in Your Network</h3>
+          <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '8px' }}>
+            {searchTerm ? `Results for "${searchTerm}"` : 'Trending in Your Network'}
+          </h3>
+          <p style={{ fontSize: '14px', color: '#999', marginBottom: '32px' }}>
+            {searchTerm ? `${filteredProfiles.length} match${filteredProfiles.length !== 1 ? 'es' : ''} found` : `${filteredProfiles.length} people available to swap`}
+          </p>
+          {filteredProfiles.length === 0 && searchTerm ? (
+            <div style={{ textAlign: 'center', padding: '64px 32px' }}>
+              <p style={{ fontSize: '20px', color: '#999', marginBottom: '16px' }}>No skills match "{searchTerm}"</p>
+              <p style={{ fontSize: '14px', color: '#bbb' }}>Try searching for Baking, Construction, Coaching, Design, or Education</p>
+              <button
+                onClick={() => setSearchTerm('')}
+                style={{ marginTop: '16px', backgroundColor: appleColors.blue, color: 'white', padding: '10px 24px', borderRadius: '8px', fontWeight: '600', border: 'none', cursor: 'pointer' }}
+              >
+                Clear Search
+              </button>
+            </div>
+          ) : (
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
@@ -610,7 +688,7 @@ function App() {
                 {/* Rating Section */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', fontSize: '13px' }}>
                   <span style={{ color: '#f59e0b' }}>
-                    {'★'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
+                    {'â'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
                   </span>
                   <span style={{ color: '#999' }}>
                     ({24 + (idx % 50)} reviews)
@@ -708,6 +786,7 @@ function App() {
               </div>
             ))}
           </div>
+          )}
         </div>
       </section>
 
@@ -758,7 +837,7 @@ function App() {
         />
       )}
 
-      {/* Terms modal — shown when setShowTerms(true) is called */}
+      {/* Terms modal â shown when setShowTerms(true) is called */}
       {showTerms && (
         <div
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
@@ -771,7 +850,7 @@ function App() {
             <button
               onClick={() => setShowTerms(false)}
               style={{ position: 'absolute', top: 16, right: 16, background: 'transparent', border: 'none', color: '#6B6B78', cursor: 'pointer', fontSize: 20 }}
-            >✕</button>
+            >â</button>
             <Terms />
           </div>
         </div>
