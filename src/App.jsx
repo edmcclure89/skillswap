@@ -512,7 +512,7 @@ function App() {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            marginBottom: '32px',
+            marginBottom: searchTerm ? '24px' : '32px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
           }}>
             <input
@@ -545,12 +545,52 @@ function App() {
                 Clear
               </button>
             )}
+
+          {/* Inline search results — appear directly below search bar */}
+          {searchTerm && (
+            <div style={{ textAlign: 'left' }}>
+              <p style={{ fontSize: '14px', color: '#999', marginBottom: '16px' }}>
+                {filteredProfiles.length} match{filteredProfiles.length !== 1 ? 'es' : ''} for "{searchTerm}"
+              </p>
+              {filteredProfiles.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                  <p style={{ fontSize: '18px', color: '#999', marginBottom: '8px' }}>No results for "{searchTerm}"</p>
+                  <p style={{ fontSize: '13px', color: '#bbb', marginBottom: '16px' }}>Try: Baking, Construction, Coaching, Design, Education</p>
+                  <button onClick={() => setSearchTerm('')} style={{ backgroundColor: appleColors.blue, color: 'white', padding: '10px 24px', borderRadius: '8px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
+                    Clear Search
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+                  {filteredProfiles.map((profile, idx) => (
+                    <div key={profile.id} style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: `1px solid ${appleColors.silver}`, padding: '20px', textAlign: 'left', cursor: 'pointer' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                    >
+                      <div style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'flex-start' }}>
+                        <SkillIcon skill={profile.primary_skill || 'general'} />
+                        <div style={{ flex: 1 }}>
+                          <h2 style={{ fontSize: '16px', fontWeight: '700', color: appleColors.gray, margin: '0 0 6px 0' }}>{profile.full_name}</h2>
+                          <span style={{ backgroundColor: appleColors.blue, color: 'white', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '12px', display: 'inline-block' }}>{profile.primary_skill}</span>
+                        </div>
+                      </div>
+                      <p style={{ color: '#666', fontSize: '13px', marginBottom: '12px', lineHeight: '1.5' }}>{profile.bio}</p>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button onClick={() => handleSwap(profile.id)} style={{ flex: 1, backgroundColor: appleColors.blue, color: 'white', padding: '9px 12px', borderRadius: '8px', fontWeight: '600', fontSize: '13px', border: 'none', cursor: 'pointer' }}>Message</button>
+                        <button onClick={() => { window.history.pushState(null, '', `/profile/${profile.id}`); setPathname(`/profile/${profile.id}`); }} style={{ flex: 1, backgroundColor: 'transparent', color: appleColors.gray, padding: '9px 12px', borderRadius: '8px', fontWeight: '600', fontSize: '13px', border: `1px solid ${appleColors.silver}`, cursor: 'pointer' }}>View</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           </div>
         </div>
       </section>
 
-      {/* Featured Skill Categories */}
-      <section style={{ padding: '64px 32px', backgroundColor: appleColors.white }}>
+      {/* Featured Skill Categories — hidden while searching */}
+      <section style={{ padding: '64px 32px', backgroundColor: appleColors.white, display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '24px', fontWeight: '700', color: appleColors.gray, marginBottom: '32px' }}>Explore Skills</h3>
           <div style={{
@@ -592,8 +632,8 @@ function App() {
         </div>
       </section>
 
-      {/* Traders Grid */}
-      <section style={{ padding: '64px 32px' }}>
+      {/* Traders Grid — only shown when not searching */}
+      <section style={{ padding: '64px 32px', display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '8px' }}>
             {searchTerm ? `Results for "${searchTerm}"` : 'Trending in Your Network'}
