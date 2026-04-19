@@ -6,7 +6,7 @@ import Auth from './Auth';
 import Terms from './Terms';
 import FreeSwapPromo from './FreeSwapPromo';
 
-// Static seed profiles Ã¢ÂÂ 3 per category, all accounts tied to edmcclure89@gmail.com
+// Static seed profiles ÃÂ¢ÃÂÃÂ 3 per category, all accounts tied to edmcclure89@gmail.com
 const STATIC_PROFILES = [
   // Baking
   { id: 'static-1', full_name: 'Maria Santos', primary_skill: 'Baking', seeking_skill: 'Social media marketing', bio: 'Professional pastry chef with 12 years in artisan bakeries. Specialize in sourdough, pastries, and wedding cakes.', email: 'edmcclure89@gmail.com' },
@@ -38,6 +38,11 @@ function App() {
   const [pathname, setPathname] = useState(window.location.pathname);
   const [userJustLoggedIn, setUserJustLoggedIn] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
+  const [messageModal, setMessageModal] = useState(null);
+  const [msgText, setMsgText] = useState('');
+  const [msgSending, setMsgSending] = useState(false);
+  const [msgSent, setMsgSent] = useState(false);
+  const [msgError, setMsgError] = useState('');
 
   // Define constants before they're used in early returns
   const appleColors = {
@@ -66,16 +71,31 @@ function App() {
     setPathname('/auth');
   };
 
-  const handleSwap = (profileId) => {
-    if (currentUser) {
-      const p = profiles.find(x => x.id === profileId);
-      const subject = encodeURIComponent('SkillSwap Interest: ' + (p ? p.full_name : 'a user'));
-      const body = encodeURIComponent('Hi,\n\nI am interested in swapping skills with ' + (p ? p.full_name : 'this user') + ' (' + window.location.origin + '/profile/' + profileId + ').\n\nMy account: ' + currentUser.email + '\n\nPlease connect us!\n\nThanks');
-      window.location.href = 'mailto:edmcclure89@gmail.com?subject=' + subject + '&body=' + body;
-    } else {
-      window.history.pushState(null, '', '/auth');
-      setPathname('/auth');
-    }
+  const openMessageModal = (profileId) => {
+    if (!currentUser) { window.history.pushState(null, '', '/auth'); setPathname('/auth'); return; }
+    const allProfiles = [...STATIC_PROFILES, ...profiles];
+    const p = allProfiles.find(x => x.id === profileId);
+    setMsgText(''); setMsgSent(false); setMsgError('');
+    setMessageModal({ recipientId: profileId, recipientName: p ? p.full_name : 'this user', recipientSkill: p ? p.primary_skill : '' });
+  };
+
+  const handleSwap = (profileId) => openMessageModal(profileId);
+
+  const handleSendMessage = async () => {
+    if (!msgText.trim()) return;
+    setMsgSending(true); setMsgError('');
+    try {
+      const { error } = await supabase.from('messages').insert({
+        sender_id: currentUser.id,
+        sender_email: currentUser.email,
+        recipient_id: messageModal.recipientId,
+        recipient_name: messageModal.recipientName,
+        body: msgText.trim(),
+      });
+      if (error) throw error;
+      setMsgSent(true);
+    } catch (err) { setMsgError('Could not send message. Please try again.'); }
+    finally { setMsgSending(false); }
   };
 
   const handleCategoryClick = (categoryName) => {
@@ -301,7 +321,7 @@ function App() {
                 cursor: 'pointer'
               }}
             >
-              Ã¢ÂÂ SkillSwap
+              ÃÂ¢ÃÂÃÂ SkillSwap
             </button>
           </div>
         </header>
@@ -411,7 +431,7 @@ function App() {
               onClick={() => { window.history.pushState(null, '', '/'); setPathname('/'); }}
               style={{ fontSize: '28px', fontWeight: '700', color: appleColors.silver, margin: 0, border: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}
             >
-              Ã¢ÂÂ SkillSwap
+              ÃÂ¢ÃÂÃÂ SkillSwap
             </button>
           </div>
         </header>
@@ -434,11 +454,7 @@ function App() {
               <button
                 onClick={() => {
                   if (!currentUser) { window.history.pushState(null, '', '/auth'); setPathname('/auth'); }
-                  else {
-                    const subject = encodeURIComponent('SkillSwap Interest: ' + profile.full_name);
-                    const body = encodeURIComponent('Hi,\n\nI am interested in swapping skills with ' + profile.full_name + ' (' + window.location.href + ').\n\nMy account: ' + currentUser.email + '\n\nPlease connect us!\n\nThanks');
-                    window.location.href = 'mailto:edmcclure89@gmail.com?subject=' + subject + '&body=' + body;
-                  }
+                  else { openMessageModal(profile.id); }
                 }}
                 style={{ width: '100%', backgroundColor: appleColors.blue, color: 'white', padding: '14px 24px', borderRadius: 10, fontWeight: 700, fontSize: 16, border: 'none', cursor: 'pointer' }}
               >
@@ -552,7 +568,7 @@ function App() {
               </button>
             )}
 
-          {/* Inline search results â appear directly below search bar */}
+          {/* Inline search results Ã¢ÂÂ appear directly below search bar */}
           {searchTerm && (
             <div style={{ textAlign: 'left' }}>
               <p style={{ fontSize: '14px', color: '#999', marginBottom: '16px' }}>
@@ -595,7 +611,7 @@ function App() {
         </div>
       </section>
 
-      {/* Featured Skill Categories â hidden while searching */}
+      {/* Featured Skill Categories Ã¢ÂÂ hidden while searching */}
       <section style={{ padding: '64px 32px', backgroundColor: appleColors.white, display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '24px', fontWeight: '700', color: appleColors.gray, marginBottom: '32px' }}>Explore Skills</h3>
@@ -638,7 +654,7 @@ function App() {
         </div>
       </section>
 
-      {/* Traders Grid â only shown when not searching */}
+      {/* Traders Grid Ã¢ÂÂ only shown when not searching */}
       <section style={{ padding: '64px 32px', display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '8px' }}>
@@ -734,7 +750,7 @@ function App() {
                 {/* Rating Section */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', fontSize: '13px' }}>
                   <span style={{ color: '#f59e0b' }}>
-                    {'Ã¢ÂÂ'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
+                    {'ÃÂ¢ÃÂÃÂ'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
                   </span>
                   <span style={{ color: '#999' }}>
                     ({24 + (idx % 50)} reviews)
@@ -883,7 +899,7 @@ function App() {
         />
       )}
 
-      {/* Terms modal Ã¢ÂÂ shown when setShowTerms(true) is called */}
+      {/* Terms modal ÃÂ¢ÃÂÃÂ shown when setShowTerms(true) is called */}
       {showTerms && (
         <div
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
@@ -896,7 +912,7 @@ function App() {
             <button
               onClick={() => setShowTerms(false)}
               style={{ position: 'absolute', top: 16, right: 16, background: 'transparent', border: 'none', color: '#6B6B78', cursor: 'pointer', fontSize: 20 }}
-            >Ã¢ÂÂ</button>
+            >ÃÂ¢ÃÂÃÂ</button>
             <Terms />
           </div>
         </div>
@@ -908,6 +924,40 @@ function App() {
         showPromo={showPromo}
         onClose={() => setShowPromo(false)}
       />
+
+      {/* Message Modal */}
+      {messageModal && (
+        <div onClick={() => setMessageModal(null)} style={{ position:'fixed',inset:0,zIndex:500,background:'rgba(0,0,0,0.55)',display:'flex',alignItems:'center',justifyContent:'center',padding:24 }}>
+          <div onClick={e=>e.stopPropagation()} style={{ background:'white',borderRadius:16,padding:32,maxWidth:480,width:'100%',boxShadow:'0 8px 40px rgba(0,0,0,0.18)',position:'relative' }}>
+            <button onClick={()=>setMessageModal(null)} style={{ position:'absolute',top:16,right:16,background:'transparent',border:'none',fontSize:20,cursor:'pointer',color:'#888' }}>✕</button>
+            {msgSent ? (
+              <div style={{ textAlign:'center',padding:'24px 0' }}>
+                <div style={{ fontSize:48,marginBottom:16 }}>✅</div>
+                <h3 style={{ fontSize:22,fontWeight:700,color:'#0A0A0F',marginBottom:8 }}>Message sent!</h3>
+                <p style={{ color:'#666',fontSize:15,marginBottom:24 }}>We'll connect you with <strong>{messageModal.recipientName}</strong> shortly.</p>
+                <button onClick={()=>setMessageModal(null)} style={{ backgroundColor:'#0066cc',color:'white',border:'none',borderRadius:8,padding:'12px 32px',fontWeight:600,fontSize:15,cursor:'pointer' }}>Done</button>
+              </div>
+            ) : (
+              <>
+                <div style={{ display:'flex',alignItems:'center',gap:14,marginBottom:24,paddingRight:24 }}>
+                  <div style={{ width:48,height:48,borderRadius:'50%',backgroundColor:'#0066cc',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:700,fontSize:20,flexShrink:0 }}>{messageModal.recipientName.charAt(0)}</div>
+                  <div>
+                    <div style={{ fontWeight:700,fontSize:17,color:'#0A0A0F' }}>{messageModal.recipientName}</div>
+                    {messageModal.recipientSkill && <div style={{ fontSize:13,color:'#888',marginTop:2 }}>{messageModal.recipientSkill}</div>}
+                  </div>
+                </div>
+                <p style={{ fontSize:14,color:'#555',marginBottom:12 }}>Introduce yourself and describe the skill swap you have in mind:</p>
+                <textarea value={msgText} onChange={e=>setMsgText(e.target.value)} placeholder={`Hi ${messageModal.recipientName.split(' ')[0]}, I'd love to swap skills! I can offer...`} rows={5} style={{ width:'100%',padding:12,borderRadius:8,border:'1px solid #e6e6e6',fontSize:14,fontFamily:'inherit',resize:'vertical',boxSizing:'border-box',outline:'none' }} />
+                {msgError && <p style={{ color:'#dc2626',fontSize:13,marginTop:8 }}>{msgError}</p>}
+                <div style={{ display:'flex',justifyContent:'flex-end',gap:10,marginTop:16 }}>
+                  <button onClick={()=>setMessageModal(null)} style={{ padding:'10px 20px',borderRadius:8,border:'1px solid #e6e6e6',background:'white',color:'#555',fontWeight:600,fontSize:14,cursor:'pointer' }}>Cancel</button>
+                  <button onClick={handleSendMessage} disabled={msgSending||!msgText.trim()} style={{ padding:'10px 24px',borderRadius:8,border:'none',background:msgText.trim()?'#0066cc':'#ccc',color:'white',fontWeight:600,fontSize:14,cursor:msgText.trim()?'pointer':'not-allowed' }}>{msgSending?'Sending...':'Send Message'}</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
