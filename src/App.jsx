@@ -6,7 +6,7 @@ import Auth from './Auth';
 import Terms from './Terms';
 import FreeSwapPromo from './FreeSwapPromo';
 
-// Static seed profiles â 3 per category, all accounts tied to edmcclure89@gmail.com
+// Static seed profiles Ã¢ÂÂ 3 per category, all accounts tied to edmcclure89@gmail.com
 const STATIC_PROFILES = [
   // Baking
   { id: 'static-1', full_name: 'Maria Santos', primary_skill: 'Baking', seeking_skill: 'Social media marketing', bio: 'Professional pastry chef with 12 years in artisan bakeries. Specialize in sourdough, pastries, and wedding cakes.', email: 'edmcclure89@gmail.com' },
@@ -68,8 +68,10 @@ function App() {
 
   const handleSwap = (profileId) => {
     if (currentUser) {
-      window.history.pushState(null, '', `/profile/${profileId}`);
-      setPathname(`/profile/${profileId}`);
+      const p = profiles.find(x => x.id === profileId);
+      const subject = encodeURIComponent('SkillSwap Interest: ' + (p ? p.full_name : 'a user'));
+      const body = encodeURIComponent('Hi,\n\nI am interested in swapping skills with ' + (p ? p.full_name : 'this user') + ' (' + window.location.origin + '/profile/' + profileId + ').\n\nMy account: ' + currentUser.email + '\n\nPlease connect us!\n\nThanks');
+      window.location.href = 'mailto:edmcclure89@gmail.com?subject=' + subject + '&body=' + body;
     } else {
       window.history.pushState(null, '', '/auth');
       setPathname('/auth');
@@ -299,7 +301,7 @@ function App() {
                 cursor: 'pointer'
               }}
             >
-              â SkillSwap
+              Ã¢ÂÂ SkillSwap
             </button>
           </div>
         </header>
@@ -409,7 +411,7 @@ function App() {
               onClick={() => { window.history.pushState(null, '', '/'); setPathname('/'); }}
               style={{ fontSize: '28px', fontWeight: '700', color: appleColors.silver, margin: 0, border: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}
             >
-              â SkillSwap
+              Ã¢ÂÂ SkillSwap
             </button>
           </div>
         </header>
@@ -432,7 +434,11 @@ function App() {
               <button
                 onClick={() => {
                   if (!currentUser) { window.history.pushState(null, '', '/auth'); setPathname('/auth'); }
-                  else { alert('Message feature coming soon!'); }
+                  else {
+                    const subject = encodeURIComponent('SkillSwap Interest: ' + profile.full_name);
+                    const body = encodeURIComponent('Hi,\n\nI am interested in swapping skills with ' + profile.full_name + ' (' + window.location.href + ').\n\nMy account: ' + currentUser.email + '\n\nPlease connect us!\n\nThanks');
+                    window.location.href = 'mailto:edmcclure89@gmail.com?subject=' + subject + '&body=' + body;
+                  }
                 }}
                 style={{ width: '100%', backgroundColor: appleColors.blue, color: 'white', padding: '14px 24px', borderRadius: 10, fontWeight: 700, fontSize: 16, border: 'none', cursor: 'pointer' }}
               >
@@ -546,7 +552,7 @@ function App() {
               </button>
             )}
 
-          {/* Inline search results — appear directly below search bar */}
+          {/* Inline search results â appear directly below search bar */}
           {searchTerm && (
             <div style={{ textAlign: 'left' }}>
               <p style={{ fontSize: '14px', color: '#999', marginBottom: '16px' }}>
@@ -589,7 +595,7 @@ function App() {
         </div>
       </section>
 
-      {/* Featured Skill Categories — hidden while searching */}
+      {/* Featured Skill Categories â hidden while searching */}
       <section style={{ padding: '64px 32px', backgroundColor: appleColors.white, display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '24px', fontWeight: '700', color: appleColors.gray, marginBottom: '32px' }}>Explore Skills</h3>
@@ -632,7 +638,7 @@ function App() {
         </div>
       </section>
 
-      {/* Traders Grid — only shown when not searching */}
+      {/* Traders Grid â only shown when not searching */}
       <section style={{ padding: '64px 32px', display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '8px' }}>
@@ -728,7 +734,7 @@ function App() {
                 {/* Rating Section */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', fontSize: '13px' }}>
                   <span style={{ color: '#f59e0b' }}>
-                    {'â'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
+                    {'Ã¢ÂÂ'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
                   </span>
                   <span style={{ color: '#999' }}>
                     ({24 + (idx % 50)} reviews)
@@ -877,7 +883,7 @@ function App() {
         />
       )}
 
-      {/* Terms modal â shown when setShowTerms(true) is called */}
+      {/* Terms modal Ã¢ÂÂ shown when setShowTerms(true) is called */}
       {showTerms && (
         <div
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
@@ -890,7 +896,7 @@ function App() {
             <button
               onClick={() => setShowTerms(false)}
               style={{ position: 'absolute', top: 16, right: 16, background: 'transparent', border: 'none', color: '#6B6B78', cursor: 'pointer', fontSize: 20 }}
-            >â</button>
+            >Ã¢ÂÂ</button>
             <Terms />
           </div>
         </div>
