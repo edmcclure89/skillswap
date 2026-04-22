@@ -6,7 +6,7 @@ import Auth from './Auth';
 import Terms from './Terms';
 import FreeSwapPromo from './FreeSwapPromo';
 
-// Static seed profiles ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ 3 per category, all accounts tied to edmcclure89@gmail.com
+// Static seed profiles ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ 3 per category, all accounts tied to edmcclure89@gmail.com
 const STATIC_PROFILES = [
   // Baking
   { id: 'static-1', full_name: 'Maria Santos', primary_skill: 'Baking', seeking_skill: 'Social media marketing', bio: 'Professional pastry chef with 12 years in artisan bakeries. Specialize in sourdough, pastries, and wedding cakes.', email: 'edmcclure89@gmail.com' },
@@ -56,7 +56,7 @@ function App() {
   const skillCategories = [
     { name: 'Baking', image: '/images/pexels-gustavo-fring-7447286.jpg' },
     { name: 'Construction', image: '/images/pexels-kindelmedia-8488020.jpg' },
-    { name: 'Crafts', image: '/images/pexels-rdne-10376205.jpg' },
+    { name: 'Crafts', image: '/images/pexels-amina-filkins-5410081.jpg' },
     { name: 'Design', image: '/images/pexels-anna-nekrashevich-7552713.jpg' },
     { name: 'Education', image: '/images/pexels-kampus-7857557.jpg' }
   ];
@@ -321,7 +321,7 @@ function App() {
                 cursor: 'pointer'
               }}
             >
-              ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ SkillSwap
+              ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ SkillSwap
             </button>
           </div>
         </header>
@@ -431,7 +431,7 @@ function App() {
               onClick={() => { window.history.pushState(null, '', '/'); setPathname('/'); }}
               style={{ fontSize: '28px', fontWeight: '700', color: appleColors.silver, margin: 0, border: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}
             >
-              ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ SkillSwap
+              ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ SkillSwap
             </button>
           </div>
         </header>
@@ -568,7 +568,7 @@ function App() {
               </button>
             )}
 
-          {/* Inline search results ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ appear directly below search bar */}
+          {/* Inline search results ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ appear directly below search bar */}
           {searchTerm && (
             <div style={{ textAlign: 'left' }}>
               <p style={{ fontSize: '14px', color: '#999', marginBottom: '16px' }}>
@@ -611,7 +611,7 @@ function App() {
         </div>
       </section>
 
-      {/* Featured Skill Categories ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ hidden while searching */}
+      {/* Featured Skill Categories ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ hidden while searching */}
       <section style={{ padding: '64px 32px', backgroundColor: appleColors.white, display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '24px', fontWeight: '700', color: appleColors.gray, marginBottom: '32px' }}>Explore Skills</h3>
@@ -654,7 +654,7 @@ function App() {
         </div>
       </section>
 
-      {/* Traders Grid ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ only shown when not searching */}
+      {/* Traders Grid ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ only shown when not searching */}
       <section style={{ padding: '64px 32px', display: searchTerm ? 'none' : 'block' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '28px', fontWeight: '700', color: appleColors.gray, marginBottom: '8px' }}>
@@ -750,7 +750,7 @@ function App() {
                 {/* Rating Section */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', fontSize: '13px' }}>
                   <span style={{ color: '#f59e0b' }}>
-                    {'ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
+                    {'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ'.repeat(Math.min(5, 3 + (idx % 3)))} {3 + (idx % 3)}.0
                   </span>
                   <span style={{ color: '#999' }}>
                     ({24 + (idx % 50)} reviews)
@@ -899,7 +899,7 @@ function App() {
         />
       )}
 
-      {/* Terms modal ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ shown when setShowTerms(true) is called */}
+      {/* Terms modal ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ shown when setShowTerms(true) is called */}
       {showTerms && (
         <div
           style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
@@ -912,7 +912,7 @@ function App() {
             <button
               onClick={() => setShowTerms(false)}
               style={{ position: 'absolute', top: 16, right: 16, background: 'transparent', border: 'none', color: '#6B6B78', cursor: 'pointer', fontSize: 20 }}
-            >ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
+            >ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
             <Terms />
           </div>
         </div>
@@ -929,10 +929,10 @@ function App() {
       {messageModal && (
         <div onClick={() => setMessageModal(null)} style={{ position:'fixed',inset:0,zIndex:500,background:'rgba(0,0,0,0.55)',display:'flex',alignItems:'center',justifyContent:'center',padding:24 }}>
           <div onClick={e=>e.stopPropagation()} style={{ background:'white',borderRadius:16,padding:32,maxWidth:480,width:'100%',boxShadow:'0 8px 40px rgba(0,0,0,0.18)',position:'relative' }}>
-            <button onClick={()=>setMessageModal(null)} style={{ position:'absolute',top:16,right:16,background:'transparent',border:'none',fontSize:20,cursor:'pointer',color:'#888' }}>Ã¢ÂÂ</button>
+            <button onClick={()=>setMessageModal(null)} style={{ position:'absolute',top:16,right:16,background:'transparent',border:'none',fontSize:20,cursor:'pointer',color:'#888' }}>ÃÂ¢ÃÂÃÂ</button>
             {msgSent ? (
               <div style={{ textAlign:'center',padding:'24px 0' }}>
-                <div style={{ fontSize:48,marginBottom:16 }}>Ã¢ÂÂ</div>
+                <div style={{ fontSize:48,marginBottom:16 }}>ÃÂ¢ÃÂÃÂ</div>
                 <h3 style={{ fontSize:22,fontWeight:700,color:'#0A0A0F',marginBottom:8 }}>Message sent!</h3>
                 <p style={{ color:'#666',fontSize:15,marginBottom:24 }}>We'll connect you with <strong>{messageModal.recipientName}</strong> shortly.</p>
                 <button onClick={()=>setMessageModal(null)} style={{ backgroundColor:'#0066cc',color:'white',border:'none',borderRadius:8,padding:'12px 32px',fontWeight:600,fontSize:15,cursor:'pointer' }}>Done</button>
